@@ -1,6 +1,7 @@
 import { Auth0Provider } from '@bcwdev/auth0provider'
 import { accountService } from '../services/AccountService'
 import BaseController from '../utils/BaseController'
+import { trackedBugsService } from '../services/TrackedBugsService.js'
 
 export class AccountController extends BaseController {
   constructor () {
@@ -8,7 +9,7 @@ export class AccountController extends BaseController {
     this.router
       .use(Auth0Provider.getAuthorizedUserInfo)
       .get('', this.getUserAccount)
-      .get('/trackedBugs', this.getTrackedBugsByAccountId)
+      .get('/trackedBugs', this.getTrackedBugsByUserId)
   }
 
   async getUserAccount(req, res, next) {
@@ -19,7 +20,13 @@ export class AccountController extends BaseController {
       next(error)
     }
   }
-  getTrackedBugsByAccountId(arg0, getTrackedBugsByAccountId) {
-    throw new Error('Method not implemented.')
+  async getTrackedBugsByUserId(req, res, next) {
+    try {
+      const userId = req.userInfo.id
+      const bugs = await trackedBugsService.getTrackedBugsByUserId(userId)
+      return res.send(bugs)
+    } catch (error) {
+      next(error)
+    }
   }
 }

@@ -21,5 +21,7 @@ TrackedBugSchema.virtual('tracker', {
   localField: 'accountId',
   foreignField: '_id',
   justOne: true,
-  ref: 'Account'
+  ref: 'Account',
 })
+
+TrackedBugSchema.index({ bugId: 1, accountId: 1 }, { unique: true })

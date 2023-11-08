@@ -3,11 +3,12 @@ import { accountService } from '../services/AccountService'
 import BaseController from '../utils/BaseController'
 
 export class AccountController extends BaseController {
-  constructor() {
+  constructor () {
     super('account')
     this.router
       .use(Auth0Provider.getAuthorizedUserInfo)
       .get('', this.getUserAccount)
+      .get('/trackedBugs', this.getTrackedBugsByAccountId)
   }
 
   async getUserAccount(req, res, next) {
@@ -17,5 +18,8 @@ export class AccountController extends BaseController {
     } catch (error) {
       next(error)
     }
+  }
+  getTrackedBugsByAccountId(arg0, getTrackedBugsByAccountId) {
+    throw new Error('Method not implemented.')
   }
 }

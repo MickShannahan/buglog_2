@@ -2,6 +2,7 @@ import { Auth0Provider } from "@bcwdev/auth0provider";
 import { bugsService } from "../services/BugsService.js";
 import BaseController from "../utils/BaseController.js";
 import { notesService } from "../services/NotesService.js";
+import { trackedBugsService } from "../services/TrackedBugsService.js";
 
 export class BugsController extends BaseController {
   constructor () {
@@ -10,6 +11,7 @@ export class BugsController extends BaseController {
       .get('', this.getBugs)
       .get('/:bugId', this.getBugById)
       .get('/:bugId/notes', this.getNotesByBugId)
+      .get('/:bugId/trackedBugs', this.getTrackersByBugId)
       .use(Auth0Provider.getAuthorizedUserInfo)
       .post('', this.createBug)
       .put('/:bugId', this.updateBug)
@@ -44,6 +46,16 @@ export class BugsController extends BaseController {
       next(error)
     }
   }
+  async getTrackersByBugId(req, res, next) {
+    try {
+      const bugId = req.params.bugId
+      const trackers = await trackedBugsService.getTrackersByBugId(bugId)
+      return res.send(trackers)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async createBug(req, res, next) {
     try {
       const bugData = req.body

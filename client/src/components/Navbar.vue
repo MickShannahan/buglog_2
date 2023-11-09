@@ -1,9 +1,10 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
-      <div class="d-flex flex-column align-items-center">
-        <img alt="logo" src="../assets/img/cw-logo.png" height="45" />
-      </div>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-warning px-3">
+    <router-link class="navbar-brand d-flex text-dark" :to="{ name: 'Home' }">
+      <h1 class="mb-0 p-1">
+        <i class="mdi mdi-bug me-3"></i>
+        <span>Buglog</span>
+      </h1>
     </router-link>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
       aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -11,11 +12,6 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto">
-        <li>
-          <router-link :to="{ name: 'About' }" class="btn text-success lighten-30 selectable text-uppercase">
-            About
-          </router-link>
-        </li>
       </ul>
       <!-- LOGIN COMPONENT HERE -->
       <Login />
@@ -51,6 +47,7 @@ a:hover {
 @media screen and (min-width: 768px) {
   nav {
     height: 64px;
+    border-bottom: 2px solid black;
   }
 }
 </style>

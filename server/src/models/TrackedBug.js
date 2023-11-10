@@ -3,7 +3,7 @@ import { Schema } from "mongoose";
 export const TrackedBugSchema = new Schema(
   {
     bugId: { type: Schema.Types.ObjectId, required: true, ref: 'Bug' },
-    accountId: { type: Schema.Types.ObjectId, require: true, ref: 'Account' }
+    accountId: { type: Schema.Types.ObjectId, required: true, ref: 'Account' }
   },
   {
     timestamps: true,

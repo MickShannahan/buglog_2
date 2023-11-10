@@ -1,9 +1,10 @@
+
 export class Account {
-  constructor(data) {
+  constructor (data) {
     this.id = data.id
-    this.email = data.email
     this.name = data.name
     this.picture = data.picture
+    this.email = data.email
     // TODO add additional properties if needed
   }
 }

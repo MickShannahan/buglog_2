@@ -10,6 +10,13 @@ class BugsService {
     const newBugs = res.data.map(pojo => new Bug(pojo))
     AppState.bugs = newBugs
   }
+
+  async getBugById(bugId) {
+    const res = await api.get(`api/bugs/${bugId}`)
+    logger.log('GOT BUG', res.data)
+    const newBug = new Bug(res.data)
+    AppState.bug = newBug
+  }
 }
 
 export const bugsService = new BugsService()

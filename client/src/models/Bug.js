@@ -1,3 +1,4 @@
+
 export class Bug {
   constructor (data) {
     this.id = data.id || data._id

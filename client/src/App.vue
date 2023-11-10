@@ -5,8 +5,18 @@
   <main>
     <router-view />
   </main>
-   <footer class="bg-dark text-light">
-    Made with 💖 by CodeWorks
+  <footer class="bg-warning">
+    <div class="container-fluid">
+      <section class="row py-2">
+        <div class="col-12 p-0">
+          <marquee class="w-100" behavior="" direction="" scrollamount="20">
+            <i class="mdi mdi-ladybug mdi-rotate-270"></i>
+            <i class="mdi mdi-bug mdi-rotate-270 mx-5"></i>
+            <i class="mdi mdi-ladybug mdi-rotate-270"></i>
+          </marquee>
+        </div>
+      </section>
+    </div>
   </footer>
 </template>
 
@@ -27,14 +37,7 @@ export default {
 <style lang="scss">
 @import "./assets/scss/main.scss";
 
-:root{
+:root {
   --main-height: calc(100vh - 32px - 64px);
-}
-
-
-footer {
-  display: grid;
-  place-content: center;
-  height: 32px;
 }
 </style>

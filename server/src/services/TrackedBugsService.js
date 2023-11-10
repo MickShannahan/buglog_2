@@ -13,7 +13,13 @@ class TrackedBugsServicee {
     return trackers
   }
   async getTrackedBugsByUserId(accountId) {
-    const bugs = await dbContext.TrackedBugs.find({ accountId }).populate('bug')
+    const bugs = await dbContext.TrackedBugs.find({ accountId }).populate({
+      path: 'bug',
+      populate: {
+        path: 'creator',
+        select: 'name picture'
+      }
+    })
     return bugs
   }
   async destroyTrackedBug(trackedBugId, userId) {

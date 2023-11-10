@@ -23,7 +23,7 @@ a {
   text-decoration: none;
 }
 
-input,
+input[type='text'],
 textarea,
 select {
   &:not(:placeholder-shown) {

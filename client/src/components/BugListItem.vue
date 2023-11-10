@@ -8,10 +8,10 @@
   <div class="col-2">
     <p class="fs-4">{{ bugProp.priority }}</p>
   </div>
-  <div class="col-3">
+  <div class="col-2">
     <p class="fs-4">{{ bugProp.creator.name }}</p>
   </div>
-  <div class="col-2">
+  <div class="col-3">
     <p class="fs-4">{{ bugProp.updatedAt.toLocaleString() }}</p>
   </div>
   <div class="col-2 pe-5">

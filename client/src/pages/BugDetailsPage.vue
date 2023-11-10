@@ -2,9 +2,15 @@
   <div v-if="bug" class="container-fluid px-5">
     <section class="row">
       <div class="col-12 move-down">
-        <h1 class="p-4 mb-0 bg-warning">
-          <span>{{ bug.title }}</span>
-        </h1>
+        <div class="d-flex">
+          <h1 class="p-4 mb-0 bg-warning">
+            <span>{{ bug.title }}</span>
+          </h1>
+          <button v-if="account.id == bug.creatorId" :disabled="bug.closed" type="button"
+            class="edit-button p-4 fs-1 bg-dark btn btn-dark" data-bs-toggle="modal" data-bs-target="#bugFormModal">
+            <i class="mdi mdi-pencil"></i>
+          </button>
+        </div>
         <div class="bg-primary backdrop bug-border"></div>
       </div>
       <div class="col-12 move-up">
@@ -24,17 +30,33 @@
             <label class="text-secondary" for="lastUpdated">Last Updated</label>
             <p class="fs-4" id="lastUpdated">{{ bug.updatedAt.toLocaleString() }}</p>
           </div>
-          <div class="col-4">
+          <div class="col-4 text-end">
+            <button @click="toggleBugClosedStatus()" class="btn"
+              :class="{ 'btn-danger': bug.closed, 'btn-success': !bug.closed }">
+              <i class="mdi" :class="{ 'mdi-bug': bug.closed, 'mdi-bug-check': !bug.closed }"></i>
+              {{ bug.closed ? 'Open' : 'Close' }} Bug
+            </button>
           </div>
           <div class="col-12 mt-3">
             {{ bug.description }}
           </div>
-          <div class="col-12 mt-3">
-            <button @click="createTrackedBug()" class="btn btn-success">
-              <i class="mdi mdi-magnify me-1"></i>
-              <span>Track Bug</span>
-            </button>
-          </div>
+          <section class="row align-items-center mt-3">
+            <div v-if="account.id" class="col-2">
+              <button v-if="!isTrackingBug" @click="createTrackedBug()" class="btn btn-success">
+                <i class="mdi mdi-magnify me-1"></i>
+                <span>Track Bug</span>
+              </button>
+              <button v-else @click="destroyTrackedBug(isTrackingBug.id)" class="btn btn-warning">
+                <i class="mdi mdi-magnify-close me-1"></i>
+                <span>Untrack Bug</span>
+              </button>
+            </div>
+            <div v-for="bugTracker in bugTrackers" :key="bugTracker.id" class="col">
+              <img class="bug-border rounded" :src="bugTracker.tracker.picture"
+                :alt="bugTracker.tracker.name + `'s profile picture'`"
+                :title="`${bugTracker.tracker.name} began tracking this bug on ${bugTracker.createdAt.toLocaleString()}`">
+            </div>
+          </section>
         </section>
       </div>
     </section>
@@ -58,6 +80,7 @@
         </div>
       </div>
     </section>
+    <BugFormModal :editableBug="bug" />
   </div>
   <div v-else class="container-fluid">
     <section class="row">
@@ -78,6 +101,7 @@ import { notesService } from '../services/NotesService.js';
 import { AppState } from '../AppState.js'
 import NoteListItem from '../components/NoteListItem.vue';
 import { trackedBugsService } from '../services/TrackedBugsService.js';
+import BugFormModal from '../components/BugFormModal.vue';
 
 export default {
   setup() {
@@ -113,6 +137,7 @@ export default {
     watch(
       () => route.params.bugId,
       (bugId) => {
+        bugsService.clearAppState()
         getBugById(bugId);
         getNotesByBugId(bugId);
         getTrackedsBugsByBugId(bugId);
@@ -124,7 +149,9 @@ export default {
       editable,
       bug: computed(() => AppState.bug),
       notes: computed(() => AppState.notes),
+      bugTrackers: computed(() => AppState.trackedBugs),
       account: computed(() => AppState.account),
+      isTrackingBug: computed(() => AppState.trackedBugs.find(trackedBug => trackedBug.accountId == AppState.account.id)),
 
       async createNote() {
         try {
@@ -145,10 +172,31 @@ export default {
         } catch (error) {
           Pop.error(error)
         }
+      },
+
+      async destroyTrackedBug(trackedBugId) {
+        try {
+          const wantsToDelete = await Pop.confirm(`Are you sure you want to stop tracking ${AppState.bug.title}?`)
+          if (!wantsToDelete) { return }
+          await trackedBugsService.destroyTrackedBug(trackedBugId)
+        } catch (error) {
+          Pop.error(error)
+        }
+      },
+
+      async toggleBugClosedStatus() {
+        try {
+          const bug = AppState.bug
+          const wantsToToggle = await Pop.confirm(`Are you sure you want to ${bug.closed ? 'open' : 'close'} ${bug.title}?`)
+          if (!wantsToToggle) { return }
+          await bugsService.toggleBugClosedStatus(bug.id)
+        } catch (error) {
+          Pop.error(error)
+        }
       }
     };
   },
-  components: { NoteListItem }
+  components: { NoteListItem, BugFormModal }
 }
 </script>
 
@@ -201,5 +249,14 @@ textarea {
 
 .creator-picture {
   border: 2px solid black;
+}
+
+.col>img {
+  height: 5vh;
+  width: 5vh;
+}
+
+.edit-button {
+  min-height: 100%;
 }
 </style>

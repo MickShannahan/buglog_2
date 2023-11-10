@@ -17,6 +17,13 @@ class TrackedBugsService {
     const newTrackedBug = new TrackedBug(res.data)
     AppState.trackedBugs.push(newTrackedBug)
   }
+  async destroyTrackedBug(trackedBugId) {
+    const res = await api.delete(`api/trackedBugs/${trackedBugId}`)
+    logger.log('DESTROYED TRACKED BUG', res.data)
+    const trackedBugIndex = AppState.trackedBugs.find(trackedBug => trackedBug.id == trackedBugId)
+    if (trackedBugIndex == -1) { throw new Error(`No bug found with the id of ${trackedBugId}`) }
+    AppState.trackedBugs.splice(trackedBugIndex, 1)
+  }
 }
 
 export const trackedBugsService = new TrackedBugsService()

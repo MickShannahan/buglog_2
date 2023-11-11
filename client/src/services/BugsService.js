@@ -40,6 +40,7 @@ class BugsService {
 
   clearAppState() {
     AppState.bug = null
+    AppState.bugs.length = 0
     AppState.notes.length = 0
     AppState.trackedBugs.length = 0
   }

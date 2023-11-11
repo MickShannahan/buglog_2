@@ -1,6 +1,5 @@
 <template>
-  <div class="conatiner-fluid px-5">
-
+  <div class="container-fluid px-5">
     <section class="row labels bg-primary px-4">
       <div class="col-12  pt-2 ">
         <section class="row">
@@ -8,7 +7,12 @@
             <p class="fs-3">Title</p>
           </div>
           <div class="col-2">
-            <p class="fs-3">Priority</p>
+
+            <p class="fs-3">
+              <i @click="togglePriority()" role="button" class="mdi mdi-sort-variant"
+                :class="{ 'bg-warning': sortByPriority }"></i>
+              Priority
+            </p>
 
           </div>
           <div class="col-2">
@@ -34,7 +38,7 @@
 
     <section class="row bugs px-4">
       <div class="col-12">
-        <section v-for="(bug, index) in bugs" :key="bug.id" class="row" :class="{
+        <section v-for="(bug, index) in bugs" :key="bug.id" class="row bottom-border" :class="{
           'bg-light': index % 2 == 0 && bug.priority < 5,
           'bg-secondary lighten-10': index % 2 == 1 && bug.priority < 5,
           'bg-warning': bug.priority == 5
@@ -55,11 +59,25 @@ import { AppState } from '../AppState.js';
 export default {
   setup() {
     const showOpen = ref(false)
+    const sortByPriority = ref(false)
 
     return {
       showOpen,
+      sortByPriority,
+      togglePriority() {
+        sortByPriority.value = !sortByPriority.value
+      },
       bugs: computed(() => {
-        return showOpen.value ? AppState.bugs.filter(bug => !bug.closed) : AppState.bugs
+        const bugs = AppState.bugs
+
+        if (sortByPriority.value) {
+          bugs.sort((a, b) => b.priority - a.priority)
+        }
+        else {
+          bugs.sort((a, b) => b.updatedAt - a.updatedAt)
+        }
+
+        return showOpen.value ? bugs.filter(bug => !bug.closed) : bugs
       })
     };
   },
@@ -82,5 +100,9 @@ export default {
 .bugs>.col-12 {
   border: 2px solid;
 
+}
+
+.bottom-border {
+  border-bottom: 1px solid black;
 }
 </style>

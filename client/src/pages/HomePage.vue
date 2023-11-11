@@ -36,6 +36,7 @@ export default {
       }
     }
     onMounted(() => {
+      bugsService.clearAppState()
       getBugs();
     });
     return {

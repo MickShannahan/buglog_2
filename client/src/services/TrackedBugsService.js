@@ -1,4 +1,5 @@
 import { AppState } from "../AppState.js"
+import { Bug } from "../models/Bug.js"
 import { TrackedBug } from "../models/TrackedBug.js"
 import { logger } from "../utils/Logger.js"
 import { api } from "./AxiosService.js"
@@ -9,6 +10,13 @@ class TrackedBugsService {
     logger.log('GOT TRACKED BUGS', res.data)
     const newTrackedBugs = res.data.map(pojo => new TrackedBug(pojo))
     AppState.trackedBugs = newTrackedBugs
+  }
+
+  async getMyTrackedBugs() {
+    const res = await api.get('account/trackedBugs')
+    logger.log('GOT MY TRACKED BUGS', res.data)
+    const newTrackedBugs = res.data.map(pojo => new Bug(pojo.bug))
+    AppState.bugs = newTrackedBugs
   }
 
   async createTrackedBug(trackedBugData) {

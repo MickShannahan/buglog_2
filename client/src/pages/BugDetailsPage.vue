@@ -31,7 +31,7 @@
             <p class="fs-4" id="lastUpdated">{{ bug.updatedAt.toLocaleString() }}</p>
           </div>
           <div class="col-4 text-end">
-            <button @click="toggleBugClosedStatus()" class="btn"
+            <button v-if="bug.creatorId == account.id" @click="toggleBugClosedStatus()" class="btn"
               :class="{ 'btn-danger': bug.closed, 'btn-success': !bug.closed }">
               <i class="mdi" :class="{ 'mdi-bug': bug.closed, 'mdi-bug-check': !bug.closed }"></i>
               {{ bug.closed ? 'Open' : 'Close' }} Bug
@@ -62,7 +62,7 @@
     </section>
     <section class="row row bg-light bug-border mx-4 mb-3">
       <div class="col-12 px-0">
-        <h2 class="px-5 py-3 mb-0 bg-warning">Notes</h2>
+        <h2 class="px-5 py-3 mb-3 bg-warning">Notes</h2>
         <form v-if="account.id" @submit.prevent="createNote()">
           <div class="mx-5 mt-3">
             <div class="form-floating">
@@ -70,7 +70,7 @@
                 id="notes" maxlength="200"></textarea>
               <label for="notes">Leave a note!</label>
             </div>
-            <div class="text-end mt-3">
+            <div class="text-end my-3">
               <button class="btn btn-primary">Submit</button>
             </div>
           </div>
@@ -239,17 +239,12 @@ textarea {
   transform: translateY(-10vh);
 }
 
-.details {
-  border: 2px solid black;
-}
 
 .bug-border {
   border: 2px solid black;
 }
 
-.creator-picture {
-  border: 2px solid black;
-}
+
 
 .col>img {
   height: 5vh;

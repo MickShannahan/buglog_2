@@ -18,7 +18,7 @@ export default {
   props: {
     noteProp: { type: Note, required: true }
   },
-  setup(props) {
+  setup() {
     return {
     }
   }

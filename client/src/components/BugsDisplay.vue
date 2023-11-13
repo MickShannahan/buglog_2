@@ -2,7 +2,7 @@
   <div class="container-fluid px-5">
     <section class="row labels bg-primary px-4">
       <div class="col-12  pt-2 ">
-        <section class="row">
+        <section class="row align-items-center">
           <div class="col-3">
             <p class="fs-3">Title</p>
           </div>
@@ -24,10 +24,10 @@
 
           </div>
           <div class="col-2 d-flex justify-content-between">
-            <p class="fs-3 me-4">
+            <p class="fs-4 me-4">
               {{ showOpen ? 'Open Bugs' : 'All Bugs' }}
             </p>
-            <div class="form-check form-switch fs-3">
+            <div class="form-check form-switch fs-5">
               <input v-model="showOpen" class="form-check-input" type="checkbox" role="switch"
                 id="flexSwitchCheckDefault">
             </div>
@@ -104,5 +104,10 @@ export default {
 
 .bottom-border {
   border-bottom: 1px solid black;
+}
+
+.mdi-sort-variant {
+  border-radius: 50%;
+  padding: 3px;
 }
 </style>

@@ -107,6 +107,7 @@ export default {
   setup() {
     const route = useRoute();
     const editable = ref({});
+    const watchableBugId = ref(route.params.bugId)
 
     async function getBugById(bugId) {
       try {
@@ -135,12 +136,12 @@ export default {
     }
 
     watch(
-      () => route.params.bugId,
-      (bugId) => {
+      watchableBugId,
+      () => {
         bugsService.clearAppState()
-        getBugById(bugId);
-        getNotesByBugId(bugId);
-        getTrackedsBugsByBugId(bugId);
+        getBugById(watchableBugId.value);
+        getNotesByBugId(watchableBugId.value);
+        getTrackedsBugsByBugId(watchableBugId.value);
       },
       { immediate: true }
     );
@@ -176,7 +177,7 @@ export default {
 
       async destroyTrackedBug(trackedBugId) {
         try {
-          const wantsToDelete = await Pop.confirm(`Are you sure you want to stop tracking ${AppState.bug.title}?`)
+          const wantsToDelete = await Pop.confirm(`Are you sure you want to stop tracking ${AppState.bug.title}?`, '')
           if (!wantsToDelete) { return }
           await trackedBugsService.destroyTrackedBug(trackedBugId)
         } catch (error) {
@@ -187,7 +188,7 @@ export default {
       async toggleBugClosedStatus() {
         try {
           const bug = AppState.bug
-          const wantsToToggle = await Pop.confirm(`Are you sure you want to ${bug.closed ? 'open' : 'close'} ${bug.title}?`)
+          const wantsToToggle = await Pop.confirm(`Are you sure you want to ${bug.closed ? 'open' : 'close'} ${bug.title}?`, '')
           if (!wantsToToggle) { return }
           await bugsService.toggleBugClosedStatus(bug.id)
         } catch (error) {

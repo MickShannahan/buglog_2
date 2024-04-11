@@ -25,6 +25,7 @@ class BugsService {
     bug.title = bugData.title || bug.title
     bug.description = bugData.description || bug.description
     bug.priority = bugData.priority || bug.priority
+    bug.closed = bugData.closed != undefined ? bugData.closed : bug.closed
     await bug.save()
     return bug
   }
@@ -32,9 +33,8 @@ class BugsService {
   async closeBug(bugId, userId) {
     const bug = await this.getBugById(bugId)
     if (bug.creatorId.toString() != userId) { throw new Forbidden("NOT ALLOWED") }
-    bug.closed = !bug.closed
-    await bug.save()
-    return bug
+    bug.remove()
+    return `${bug.title} was removed`
   }
 
 }

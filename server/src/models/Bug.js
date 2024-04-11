@@ -2,8 +2,8 @@ import { Schema } from "mongoose";
 
 export const BugSchema = new Schema(
   {
-    title: { type: String, required: true, maxlength: 30 },
-    description: { type: String, required: true, maxlength: 200 },
+    title: { type: String, required: true, maxlength: 50 },
+    description: { type: String, required: true, maxlength: 250 },
     priority: { type: Number, min: 1, max: 5, required: true },
     closed: { type: Boolean, required: true, default: false },
     closedDate: { type: Date },
